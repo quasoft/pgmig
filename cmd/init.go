@@ -48,9 +48,9 @@ var initCmd = &cobra.Command{
 		defer initSession.Disconnect()
 
 		// Create changelog table if it does not exist
-		exists, err := initSession.EnsureChangelogExists()
-		if err != nil || !exists {
-			fmt.Println("Error: changelog table does not exists and could not be created!")
+		err = initSession.EnsureChangelogExists()
+		if err != nil {
+			fmt.Printf("Error: changelog table does not exists and could not be created: %s\n", err)
 			initSession.Disconnect()
 			os.Exit(1)
 		}

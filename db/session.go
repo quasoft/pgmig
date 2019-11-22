@@ -61,24 +61,24 @@ func (s *Session) Disconnect() error {
 }
 
 // EnsureChangelogExists creates the changelog table if it does not exist
-func (s *Session) EnsureChangelogExists() (bool, error) {
+func (s *Session) EnsureChangelogExists() error {
 	// TODO: Remove unused fields from table structure
 	sql := fmt.Sprintf(`CREATE TABLE IF NOT EXISTS "%s" (
-		id SERIAL,
-		version INTEGER NOT NULL,
-		file_name VARCHAR(2048) NOT NULL,
-		applied_by VARCHAR(100) DEFAULT CURRENT_USER NOT NULL,
-		date_time TIMESTAMP(0) WITHOUT TIMEZONE DEFAULT  CURRENT_TIMESTAMP NOT NULL,
-		state bool DEFAULT false NOT NULL,
+		id serial,
+		version integer NOT NULL,
+		file_name varchar(2048) NOT NULL,
+		applied_by varchar(100) NOT NULL DEFAULT CURRENT_USER,
+		date_time timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		state bool NOT NULL DEFAULT false,
 		CONSTRAINT "%s_pkey" PRIMARY KEY(id),
-		CONSTRAINT "%s_version_unique" UNIQUE(version),
+		CONSTRAINT "%s_version_unique" UNIQUE(version)
 		)`,
 		sanitizeIdentifier(s.ChangelogName),
 		sanitizeIdentifier(s.ChangelogName),
 		sanitizeIdentifier(s.ChangelogName),
 	)
 	_, err := s.db.Exec(sql)
-	return false, err
+	return err
 }
 
 // InsertLog records the migration in the changelog
