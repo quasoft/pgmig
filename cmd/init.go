@@ -24,7 +24,7 @@ func init() {
 }
 
 var initCmd = &cobra.Command{
-	Use:   "pgmig init [--host <string>] [--port <int>] [--database <string>] [--username <string>] [--ssl-mode <string>] [--changelog-name <string>] [--interactive]",
+	Use:   "init [--host <string>] [--port <int>] [--database <string>] [--username <string>] [--ssl-mode <string>] [--changelog-name <string>] [--interactive]",
 	Short: "Create changelog table in specified PostgreSQL database",
 	Example: `  Specify database with PG environment variables:
   pgmig init

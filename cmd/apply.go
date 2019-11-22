@@ -29,7 +29,7 @@ func init() {
 }
 
 var applyCmd = &cobra.Command{
-	Use:   "pgmig apply [--dir <path>] [--host <string>] [--port <int>] [--database <string>] [--username <string>] [--ssl-mode <string>] [--create-changelog <bool>] [--changelog-name <string>] [--interactive]",
+	Use:   "apply [--dir <path>] [--host <string>] [--port <int>] [--database <string>] [--username <string>] [--ssl-mode <string>] [--create-changelog <bool>] [--changelog-name <string>] [--interactive]",
 	Short: "Applies migration SQL files from a directory to a specified PostgreSQL database",
 	Example: `  Apply pending migrations:
   pgmig apply
