@@ -10,15 +10,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var applySession *db.Session
-var applyDir *mig.Dir
+var applySession = db.NewSession()
+var applyDir = mig.NewDir()
 var createChangelog bool
 
 func init() {
-	applySession := db.NewSession()
-	dir := mig.NewDir()
 	applyCmd.Flags().SortFlags = false
-	applyCmd.Flags().StringVarP(&dir.Path, "dir", "D", "", "Local directory with migration scripts (default: current dir)")
+	applyCmd.Flags().StringVarP(&applyDir.Path, "dir", "D", "", "Local directory with migration scripts (default: current dir)")
 	applyCmd.Flags().StringP("host", "", "localhost", "Hostname or IP address of PostgreSQL server")
 	applyCmd.Flags().StringP("port", "p", "5432", "The port of the DB instance")
 	applyCmd.Flags().StringP("database", "d", "localhost", "Hostname or IP address of PostgreSQL server")

@@ -9,10 +9,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var initSession *db.Session
+var initSession = db.NewSession()
 
 func init() {
-	initSession := db.NewSession()
 	initCmd.Flags().SortFlags = false
 	initCmd.Flags().StringP("host", "", "localhost", "Hostname or IP address of PostgreSQL server")
 	initCmd.Flags().StringP("port", "p", "5432", "The port of the DB instance")

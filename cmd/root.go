@@ -10,14 +10,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var rootSession *db.Session
-var rootDir *mig.Dir
+var rootSession = db.NewSession()
+var rootDir = mig.NewDir()
 
 func init() {
-	rootSession := db.NewSession()
-	dir := mig.NewDir()
 	rootCmd.Flags().SortFlags = false
-	rootCmd.Flags().StringVarP(&dir.Path, "dir", "D", "", "Local directory with migration scripts (default: current dir)")
+	rootCmd.Flags().StringVarP(&rootDir.Path, "dir", "D", "", "Local directory with migration scripts (default: current dir)")
 	rootCmd.Flags().StringP("host", "", "localhost", "Hostname or IP address of PostgreSQL server")
 	rootCmd.Flags().StringP("port", "p", "5432", "The port of the DB instance")
 	rootCmd.Flags().StringP("database", "d", "localhost", "Hostname or IP address of PostgreSQL server")

@@ -34,7 +34,7 @@ Create the necessary changelog table:
 
     pgmig init --host 10.0.0.1 -d testdb -U postgres
 
-Check for pending migrations (which have not been applied to the database yet) in the PostgreSQL database specified by PG_* environment variables:
+Check for pending migrations (which have not been applied to the database yet) in the PostgreSQL database specified by PG* environment variables:
 
     pgmig -D ~/myproject/db
 
