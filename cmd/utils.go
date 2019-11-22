@@ -12,7 +12,7 @@ func getFlagOrEnv(cmd *cobra.Command, flagName string, envName string) string {
 	// If flag has been set in command line arguments, use that
 	if cmd.Flags().Changed(flagName) {
 		value, err := cmd.Flags().GetString(flagName)
-		if err != nil {
+		if err == nil {
 			return value
 		}
 	}
@@ -27,7 +27,7 @@ func getFlagOrEnv(cmd *cobra.Command, flagName string, envName string) string {
 
 	// Else, use the default value
 	value, err := cmd.Flags().GetString(flagName)
-	if err != nil {
+	if err == nil {
 		return value
 	}
 
