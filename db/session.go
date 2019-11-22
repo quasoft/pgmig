@@ -101,12 +101,15 @@ func (s *Session) InsertLog(m mig.File) error {
 // lastMigratedVer returns the version of the last migration file that was applied successfully,
 // according to the changelog table
 func (s *Session) lastMigratedVer() (int, error) {
-	sql := fmt.Sprintf(
-		`SELECT MAX(version) FROM "%s" WHERE state = true`,
+	query := fmt.Sprintf(
+		`SELECT COALESCE(MAX(version), 0) FROM "%s" WHERE state = true`,
 		sanitizeIdentifier(s.ChangelogName),
 	)
 	var migVer int
-	err := s.db.QueryRow(sql).Scan(&migVer)
+	err := s.db.QueryRow(query).Scan(&migVer)
+	if err == sql.ErrNoRows {
+		return 0, nil
+	}
 	if err != nil {
 		return 0, fmt.Errorf("could not get version of last migration from changelog table: %v", err)
 	}
