@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"log"
 	"os"
 
 	"github.com/quasoft/pgmig/db"
@@ -15,6 +16,7 @@ func getFlagOrEnv(cmd *cobra.Command, flagName string, envName string) string {
 		if err == nil {
 			return value
 		}
+		log.Printf("could not get value for changed flag %s", flagName)
 	}
 
 	// If corresponding environment variable has been set, use that
@@ -30,6 +32,7 @@ func getFlagOrEnv(cmd *cobra.Command, flagName string, envName string) string {
 	if err == nil {
 		return value
 	}
+	log.Printf("could not get default value for flag %s", flagName)
 
 	return ""
 }
