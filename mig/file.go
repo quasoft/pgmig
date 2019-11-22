@@ -5,6 +5,7 @@ type File struct {
 	Ver      int
 	Title    string
 	FileName string
+	Path     string
 }
 
 // NewFile creates a new migration file object

@@ -74,6 +74,7 @@ func (d *Dir) Migrations() ([]File, error) {
 				return nil, fmt.Errorf("found migrations with the same version #%d:\r\n- %s\r\n- %s", m.Ver, mm.FileName, m.FileName)
 			}
 		}
+		m.Path = filepath.Join(d.Path, m.FileName)
 		migrations = append(migrations, *m)
 	}
 

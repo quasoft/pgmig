@@ -94,7 +94,7 @@ func (s *Session) InsertLog(m mig.File) error {
 		)`,
 		sanitizeIdentifier(s.ChangelogName),
 	)
-	_, err := s.db.Exec(sql, m.Ver, m.FileName)
+	_, err := s.db.Exec(sql, m.Ver, m.Path)
 	return err
 }
 
@@ -133,7 +133,7 @@ func (s *Session) wasApplied(migVer int) (bool, error) {
 }
 
 func (s *Session) Apply(m mig.File) error {
-	bytes, err := ioutil.ReadFile(m.FileName)
+	bytes, err := ioutil.ReadFile(m.Path)
 	if err != nil {
 		return fmt.Errorf("could not read migration file %s: %v", m.FileName, err)
 	}
