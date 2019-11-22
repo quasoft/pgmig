@@ -24,7 +24,7 @@ func init() {
 	applyCmd.Flags().StringP("ssl-mode", "s", "disable", "SSL mode (disable | allow | prefer | require | verify-ca | validate-full)")
 	applyCmd.Flags().BoolVarP(&createChangelog, "create-changelog", "c", false, "Automatically create changelog table if it does not exist")
 	applyCmd.Flags().StringVarP(&applySession.ChangelogName, "changelog-name", "n", "changelog", "Name of table to write change logs to")
-	applyCmd.Flags().BoolP("interactive", "i", true, "Ask for password if not provided in PG_PASSWORD environment variable or the PGPASSFILE")
+	applyCmd.Flags().BoolP("interactive", "i", true, "Ask for password if not provided in PGPASSWORD environment variable or the PGPASSFILE")
 	rootCmd.AddCommand(applyCmd)
 }
 

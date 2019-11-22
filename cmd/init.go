@@ -19,7 +19,7 @@ func init() {
 	initCmd.Flags().StringP("username", "U", "", "The username of a superuser")
 	initCmd.Flags().StringP("ssl-mode", "s", "disable", "SSL mode (disable | allow | prefer | require | verify-ca | validate-full)")
 	initCmd.Flags().StringVarP(&initSession.ChangelogName, "changelog-name", "n", "changelog", "Name of table to write change logs to")
-	initCmd.Flags().BoolP("interactive", "i", true, "Ask for password if not provided in PG_PASSWORD environment variable or the PGPASSFILE")
+	initCmd.Flags().BoolP("interactive", "i", true, "Ask for password if not provided in PGPASSWORD environment variable or the PGPASSFILE")
 	rootCmd.AddCommand(initCmd)
 }
 

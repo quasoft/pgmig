@@ -59,7 +59,7 @@ func quoteString(value string) string {
 }
 
 func getPassword(interactive bool) string {
-	password := os.Getenv("PG_PASSWORD")
+	password := os.Getenv("PGPASSWORD")
 	if password == "" && interactive {
 		pwd, err := readPassword("Enter DB password: ")
 		if err == nil {
