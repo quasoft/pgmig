@@ -81,20 +81,22 @@ func (s *Session) EnsureChangelogExists() error {
 	return err
 }
 
-// InsertLog records the migration in the changelog
-func (s *Session) InsertLog(m mig.File) error {
+// insertLog records the migration in the changelog
+func (s *Session) insertLog(m mig.File) error {
 	sql := fmt.Sprintf(
-		`INSERT INTO %s(
-			version,
-			file_name
-		)
-		VALUES(
-			$1,
-			$2
-		)`,
+		`INSERT INTO %s (version, file_name) VALUES($1, $2)`,
 		sanitizeIdentifier(s.ChangelogName),
 	)
-	_, err := s.db.Exec(sql, m.Ver, m.Path)
+	_, err := s.db.Exec(sql, m.Ver, m.FileName)
+	return err
+}
+
+func (s *Session) updateLog(migVer int, state bool) error {
+	sql := fmt.Sprintf(
+		`UPDATE %s SET state = $1 WHERE version = $2`,
+		sanitizeIdentifier(s.ChangelogName),
+	)
+	_, err := s.db.Exec(sql, state, migVer)
 	return err
 }
 
@@ -144,17 +146,19 @@ func (s *Session) Apply(m mig.File) error {
 		return fmt.Errorf("could not open transaction: %v", err)
 	}
 
+	err = s.insertLog(m)
+	if err != nil {
+		tx.Rollback()
+		return fmt.Errorf("could not add migration #%d for file %s to changelog, rolling back...: %v", m.Ver, m.FileName, err)
+	}
+
 	_, err = s.db.Exec(sql)
 	if err != nil {
 		tx.Rollback()
 		return fmt.Errorf("could not execute migration #%d from file %s: %v", m.Ver, m.FileName, err)
 	}
 
-	sql = fmt.Sprintf(
-		`UPDATE %s SET state = $1 WHERE version = $2`,
-		sanitizeIdentifier(s.ChangelogName),
-	)
-	_, err = s.db.Exec(sql, true, m.Ver)
+	err = s.updateLog(m.Ver, true)
 	if err != nil {
 		tx.Rollback()
 		return fmt.Errorf("could not mark migration #%d for file %s as completed in DB, rolling back...: %v", m.Ver, m.FileName, err)
