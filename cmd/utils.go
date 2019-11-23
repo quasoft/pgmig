@@ -41,7 +41,7 @@ func ParseFlagsOrEnv(s *db.Session, cmd *cobra.Command) {
 	s.Host = getFlagOrEnv(cmd, "host", "PGHOST")
 	s.Port = getFlagOrEnv(cmd, "port", "PGPORT")
 	s.Database = getFlagOrEnv(cmd, "database", "PGDATABASE")
-	s.Username = getFlagOrEnv(cmd, "username", "PGUSERNAME")
+	s.Username = getFlagOrEnv(cmd, "username", "PGUSER")
 	s.SslMode = getFlagOrEnv(cmd, "ssl-mode", "PGSSLMODE")
 	interactive, err := cmd.Flags().GetBool("interactive")
 	if err != nil {
