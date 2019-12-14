@@ -14,6 +14,6 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print the version number",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("pgmig v1.0.6")
+		fmt.Println("pgmig v1.0.7")
 	},
 }
