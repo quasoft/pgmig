@@ -119,6 +119,21 @@ func (s *Session) lastMigratedVer() (int, error) {
 	return migVer, nil
 }
 
+// failed checks if the specified migration is in failed state
+func (s *Session) failed(migVer int) (bool, error) {
+	sql := fmt.Sprintf(
+		`SELECT COUNT(*) FROM "%s" WHERE state = false AND version = $1`,
+		sanitizeIdentifier(s.ChangelogName),
+	)
+	var cnt int
+	err := s.db.QueryRow(sql, migVer).Scan(&cnt)
+	if err != nil {
+		return false, fmt.Errorf("could not check in changelog %s if migration #%d failed: %v", s.ChangelogName, migVer, err)
+	}
+
+	return cnt > 0, nil
+}
+
 // wasApplied checks if the specified migration was applied to DB
 func (s *Session) wasApplied(migVer int) (bool, error) {
 	sql := fmt.Sprintf(
@@ -146,7 +161,13 @@ func (s *Session) Apply(m mig.File) error {
 		return fmt.Errorf("could not open transaction: %v", err)
 	}
 
-	err = s.insertLog(m)
+	hasFailed, err := s.failed(m.Ver)
+	if err != nil {
+		return fmt.Errorf("could not check state of migration #%d for file %s: %v", m.Ver, m.FileName, err)
+	}
+	if !hasFailed {
+		err = s.insertLog(m)
+	}
 	if err != nil {
 		tx.Rollback()
 		return fmt.Errorf("could not add migration #%d for file %s to changelog, rolling back...: %v", m.Ver, m.FileName, err)
